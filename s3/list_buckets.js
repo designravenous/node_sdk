@@ -8,8 +8,6 @@ const run = async () => {
     data.Buckets.map(item => {
         s3Client.send(new GetBucketAclCommand({Bucket: item.Name}))
             .then(acl => {
-                //console.log(`${item.Name}: ${acl.Grants[0].Permission} for more details look below:`);
-                //console.log(acl.Grants[0].Grantee);
                 let bucket_data = {
                     Bucket: `${item.Name}`,
                     permissions: `${acl.Grants[0].Permission}`,
@@ -20,7 +18,6 @@ const run = async () => {
             })
             .catch(err => console.log(`unable to find ACL for ${item.Name}`))
     }); 
-    //console.log(data.Buckets.length)
     return data; // For unit tests.
   } catch (err) {
     console.log("Error", err);
@@ -28,6 +25,9 @@ const run = async () => {
 };
 run();
 setTimeout(() =>{
-    console.log(bucket_array)
-    console.log(bucket_array.length)
+    let data = {
+      "results": bucket_array,
+      "count": bucket_array.length
+    }
+    console.log(data);
 }, 3000)
